@@ -1,0 +1,40 @@
+[project]
+name = "django-helmes"
+version = "0.1.0"
+authors = [{ name = "City of Helsinki", email = "dev@hel.fi" }]
+description = "Notifications for City of Helsinki Django apps 🔔"
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = [
+    "django",
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+]
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = ["django>=4.2",]
+
+[project.urls]
+Homepage = "https://github.com/City-of-Helsinki/django-helmes"
+Issues = "https://github.com/City-of-Helsinki/django-helmes/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
