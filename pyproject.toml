@@ -1,5 +1,5 @@
 [project]
-name = "django-helmes"
+name = "django-pulu"
 version = "0.1.0"
 authors = [{ name = "City of Helsinki", email = "dev@hel.fi" }]
 description = "Notifications for City of Helsinki Django apps 🔔"
@@ -32,8 +32,8 @@ license-files = ["LICENSE"]
 dependencies = ["django>=4.2",]
 
 [project.urls]
-Homepage = "https://github.com/City-of-Helsinki/django-helmes"
-Issues = "https://github.com/City-of-Helsinki/django-helmes/issues"
+Homepage = "https://github.com/City-of-Helsinki/django-pulu"
+Issues = "https://github.com/City-of-Helsinki/django-pulu/issues"
 
 [build-system]
 requires = ["hatchling"]
