@@ -80,6 +80,7 @@ class Notification(models.Model):
     valid_objects = ValidNotificationManager()
 
     class Meta:
+        ordering = ["-type", "-validity_period_start", "-created_at"]
         verbose_name = _("notification")
         verbose_name_plural = _("notifications")
 
