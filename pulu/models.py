@@ -1,7 +1,18 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+
+
+class ValidNotificationManager(models.Manager):
+    def get_queryset(self):
+        now = timezone.now()
+        return (
+            super()
+            .get_queryset()
+            .filter(validity_period_start__lte=now, validity_period_end__gte=now)
+        )
 
 
 class Notification(models.Model):
@@ -65,6 +76,9 @@ class Notification(models.Model):
         max_length=100,
         verbose_name=_("External URL title (English)"),
     )
+
+    objects = models.Manager()
+    valid_objects = ValidNotificationManager()
 
     class Meta:
         verbose_name = _("notification")
