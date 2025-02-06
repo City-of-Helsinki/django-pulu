@@ -39,6 +39,52 @@ Issues = "https://github.com/City-of-Helsinki/django-pulu/issues"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.envs.default.scripts]
+test = "pytest {args}"
+lint = [
+    "pre-commit install",
+    "pre-commit run -a",
+]
+
+[tool.hatch.envs.hatch-test]
+default-args = ["pulu_tests"]
+randomize = true
+parallel = false
+dependencies = [
+    "pytest",
+    "pytest-django",
+    "pytest-factoryboy",
+    "factory_boy",
+    "freezegun",
+    "coverage-enable-subprocess",
+    "coverage[toml]",
+    "pytest-mock",
+    "pytest-randomly",
+    "pytest-rerunfailures",
+    "pytest-xdist[psutil]",
+]
+matrix-name-format = "dj{value}"
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.9"]
+django = ["4.2"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.10", "3.11", "3.12"]
+django = ["4.2", "5.0", "5.1"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.13"]
+django = ["5.1"]
+
+[tool.hatch.envs.hatch-test.overrides]
+matrix.django.dependencies = [
+    { value = "django~={matrix:django}" },
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pulu"]
+
 [tool.ruff]
 target-version = "py39"
 
@@ -60,3 +106,11 @@ select = [
     # flake8-print
     "T20",
 ]
+
+[tool.pytest.ini_options]
+django_find_project = false
+testpaths = [
+    "pulu_tests",
+]
+DJANGO_SETTINGS_MODULE = "pulu_tests.settings"
+pythonpath = "."
