@@ -16,10 +16,10 @@ class ValidNotificationManager(models.Manager):
 
 
 class Notification(models.Model):
-    class Type(models.TextChoices):
-        INFO = "INFO", _("Information")
-        ALERT = "ALERT", _("Alert")
-        ERROR = "ERROR", _("Error")
+    class Type(models.IntegerChoices):
+        INFO = 20, _("Information")
+        ALERT = 30, _("Alert")
+        ERROR = 40, _("Error")
 
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name=_("Creation time")
@@ -29,8 +29,7 @@ class Notification(models.Model):
     )
     validity_period_start = models.DateTimeField(verbose_name=_("Valid from"))
     validity_period_end = models.DateTimeField(verbose_name=_("Valid until"))
-    type = models.CharField(
-        max_length=8,
+    type = models.IntegerField(
         choices=Type.choices,
         default=Type.INFO,
         verbose_name=_("Notification type"),
