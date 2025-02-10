@@ -31,6 +31,23 @@ license = "MIT"
 license-files = ["LICENSE"]
 dependencies = ["django>=4.2",]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-django",
+    "pytest-factoryboy",
+    "factory_boy",
+    "freezegun",
+    "coverage-enable-subprocess",
+    "coverage[toml]",
+    "pytest-mock",
+    "pytest-randomly",
+    "pytest-rerunfailures",
+    "pytest-xdist[psutil]",
+]
+rest_framework = ["djangorestframework"]
+all = ["django-pulu[rest_framework]", "django-pulu[test]"]
+
 [project.urls]
 Homepage = "https://github.com/City-of-Helsinki/django-pulu"
 Issues = "https://github.com/City-of-Helsinki/django-pulu/issues"
@@ -50,19 +67,7 @@ lint = [
 default-args = ["pulu_tests"]
 randomize = true
 parallel = false
-dependencies = [
-    "pytest",
-    "pytest-django",
-    "pytest-factoryboy",
-    "factory_boy",
-    "freezegun",
-    "coverage-enable-subprocess",
-    "coverage[toml]",
-    "pytest-mock",
-    "pytest-randomly",
-    "pytest-rerunfailures",
-    "pytest-xdist[psutil]",
-]
+features = ["all"]
 matrix-name-format = "dj{value}"
 
 [[tool.hatch.envs.hatch-test.matrix]]
