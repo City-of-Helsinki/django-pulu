@@ -14,6 +14,13 @@ def values_list(objects: Union[Collection, QuerySet[Notification]], *fields: str
     return [(getattr(obj, field) for field in fields) for obj in objects]
 
 
+def values_list_from_dict(objects: Collection[dict], *fields: str):
+    flat = len(fields) == 1
+    if flat:
+        return [obj.get(fields[0]) for obj in objects]
+    return [(obj.get(field) for field in fields) for obj in objects]
+
+
 def assert_qs_values(
     qs: QuerySet, values: Collection, *fields: str, ordered: bool = False
 ):
