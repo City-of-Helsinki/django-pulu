@@ -1,67 +1,46 @@
-from collections.abc import Collection
-from datetime import datetime, timedelta
-from typing import Union
+from datetime import datetime
 
 import pytest
-from django.db.models import QuerySet
-from django.utils import timezone
 from freezegun import freeze_time
 
 from pulu.models import Notification
-
-
-def _values_list(objects: Union[Collection, QuerySet[Notification]], *fields: str):
-    flat = len(fields) == 1
-    if isinstance(objects, QuerySet):
-        return objects.values_list(*fields, flat=flat)
-    if flat:
-        return [getattr(obj, fields[0]) for obj in objects]
-    return [(getattr(obj, field) for field in fields) for obj in objects]
-
-
-def assert_qs_values(
-    qs: QuerySet, values: Collection, *fields: str, ordered: bool = False
-):
-    """Assert that the values of the given fields match between a query set and
-    a collection of objects."""
-    assert len(qs) == len(values)
-    if ordered:
-        assert list(_values_list(qs, *fields)) == _values_list(values, *fields)
-    else:
-        assert set(_values_list(qs, *fields)) == set(_values_list(values, *fields))
+from pulu_tests.utils import assert_qs_values
 
 
 @freeze_time("2025-01-01T12:00:00Z")
 @pytest.mark.django_db
-def test_notification_model_managers(notification_factory):
+def test_notification_model_managers(notification_factory, make_relative_time):
+    relative_time = make_relative_time(
+        datetime.fromisoformat("2025-01-01T12:00:00+00:00")
+    )
     expired_notification = notification_factory(
-        validity_period_start=datetime.fromisoformat("2024-01-01T00:00:00+00:00"),
-        validity_period_end=datetime.fromisoformat("2025-01-01T11:59:59+00:00"),
+        validity_period_start=relative_time.last_hour,
+        validity_period_end=relative_time.last_second,
     )
     future_notification = notification_factory(
-        validity_period_start=datetime.fromisoformat("2025-01-01T12:00:01+00:00"),
-        validity_period_end=datetime.fromisoformat("2025-01-02T00:00:00+00:00"),
+        validity_period_start=relative_time.next_second,
+        validity_period_end=relative_time.tomorrow,
     )
     valid_notifications = [
         # Middle of validity period
         notification_factory(
-            validity_period_start=datetime.fromisoformat("2025-01-01T11:00:00+00:00"),
-            validity_period_end=datetime.fromisoformat("2025-01-01T13:00:00+00:00"),
+            validity_period_start=relative_time.last_hour,
+            validity_period_end=relative_time.next_hour,
         ),
         # First valid second
         notification_factory(
-            validity_period_start=datetime.fromisoformat("2025-01-01T12:00:00+00:00"),
-            validity_period_end=datetime.fromisoformat("2025-01-01T13:00:00+00:00"),
+            validity_period_start=relative_time.now,
+            validity_period_end=relative_time.next_hour,
         ),
         # Last valid second
         notification_factory(
-            validity_period_start=datetime.fromisoformat("2025-01-01T11:00:00+00:00"),
-            validity_period_end=datetime.fromisoformat("2025-01-01T12:00:00+00:00"),
+            validity_period_start=relative_time.last_hour,
+            validity_period_end=relative_time.now,
         ),
         # Valid only at 12:00:00
         notification_factory(
-            validity_period_start=datetime.fromisoformat("2025-01-01T12:00:00+00:00"),
-            validity_period_end=datetime.fromisoformat("2025-01-01T12:00:00+00:00"),
+            validity_period_start=relative_time.now,
+            validity_period_end=relative_time.now,
         ),
     ]
     created_notifications = [
@@ -75,64 +54,41 @@ def test_notification_model_managers(notification_factory):
 
 @freeze_time("2025-01-01T12:00:00Z")
 @pytest.mark.django_db
-def test_notification_default_ordering(valid_notification_factory):
+def test_notification_default_ordering(valid_notification_factory, relative_now):
     """Notifications should order with the following priority:
     1. Type, error > warning > info (desc)
     2. Validity period start, most recent first (desc)
     3. Creation time, newest first (desc)
     """
-    last_hour = timezone.now() - timedelta(hours=1)
-    last_day = timezone.now() - timedelta(days=1)
-    last_month = timezone.now() - timedelta(days=30)
+
+    def make_error(*args, **kwargs):
+        return valid_notification_factory(*args, **kwargs, type=Notification.Type.ERROR)
+
+    def make_alert(*args, **kwargs):
+        return valid_notification_factory(*args, **kwargs, type=Notification.Type.ALERT)
+
+    def make_info(*args, **kwargs):
+        return valid_notification_factory(*args, **kwargs, type=Notification.Type.INFO)
+
     expected_order = [
         # Error
-        valid_notification_factory(
-            type=Notification.Type.ERROR, validity_period_start=last_hour
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ERROR, validity_period_start=last_hour
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ERROR, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ERROR, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ERROR, validity_period_start=last_month
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ERROR, validity_period_start=last_month
-        ),
+        make_error(validity_period_start=relative_now.last_second),
+        make_error(validity_period_start=relative_now.last_second),
+        make_error(validity_period_start=relative_now.last_hour),
+        make_error(validity_period_start=relative_now.last_hour),
+        make_error(validity_period_start=relative_now.yesterday),
+        make_error(validity_period_start=relative_now.yesterday),
         # Alert
-        valid_notification_factory(
-            type=Notification.Type.ALERT, validity_period_start=last_hour
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ALERT, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ALERT, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ALERT, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.ALERT, validity_period_start=last_month
-        ),
+        make_alert(validity_period_start=relative_now.last_second),
+        make_alert(validity_period_start=relative_now.last_hour),
+        make_alert(validity_period_start=relative_now.last_hour),
+        make_alert(validity_period_start=relative_now.last_hour),
+        make_alert(validity_period_start=relative_now.yesterday),
         # Info
-        valid_notification_factory(
-            type=Notification.Type.INFO, validity_period_start=last_hour
-        ),
-        valid_notification_factory(
-            type=Notification.Type.INFO, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.INFO, validity_period_start=last_day
-        ),
-        valid_notification_factory(
-            type=Notification.Type.INFO, validity_period_start=last_day
-        ),
+        make_info(validity_period_start=relative_now.last_second),
+        make_info(validity_period_start=relative_now.last_hour),
+        make_info(validity_period_start=relative_now.last_hour),
+        make_info(validity_period_start=relative_now.last_hour),
     ]
 
     assert_qs_values(
