@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pulu", "0002_alter_notification_type"),
+        ("helsinki_notification", "0002_alter_notification_type"),
     ]
 
     operations = [

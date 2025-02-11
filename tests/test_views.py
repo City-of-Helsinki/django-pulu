@@ -1,8 +1,8 @@
 import pytest
 from freezegun import freeze_time
 
-from pulu.models import Notification
-from pulu_tests.utils import values_list, values_list_from_dict
+from helsinki_notification.models import Notification
+from tests.utils import values_list, values_list_from_dict
 
 
 @freeze_time("2025-01-01T12:00:00Z")

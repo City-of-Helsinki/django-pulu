@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PuluConfig(AppConfig):
+class HelsinkiNotificationConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "pulu"
+    name = "helsinki_notification"

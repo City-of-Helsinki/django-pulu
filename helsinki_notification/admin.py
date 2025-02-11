@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
-from pulu.models import Notification
+from helsinki_notification.models import Notification
 
 
 @admin.register(Notification)

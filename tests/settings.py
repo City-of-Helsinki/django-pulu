@@ -15,8 +15,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "pulu",
-    "pulu_tests",
+    "helsinki_notification",
+    "tests",
 ]
 
 MIDDLEWARE = [
@@ -29,7 +29,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "pulu_tests.urls"
+ROOT_URLCONF = "tests.urls"
 
 TEMPLATES = [
     {
