@@ -87,6 +87,15 @@ matrix.django.dependencies = [
     { value = "django~={matrix:django}" },
 ]
 
+[tool.hatch.envs.hatch-test.scripts]
+run = [
+    "./pulu_tests/manage.py makemigrations --check",
+    "pytest{env:HATCH_TEST_ARGS:} {args}",
+]
+run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
+cov-combine = "coverage combine"
+cov-report = "coverage report"
+
 [tool.hatch.build.targets.wheel]
 packages = ["pulu"]
 
