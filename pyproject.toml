@@ -1,5 +1,5 @@
 [project]
-name = "django-pulu"
+name = "django-helsinki-notification"
 version = "0.1.0"
 authors = [{ name = "City of Helsinki", email = "dev@hel.fi" }]
 description = "Notifications for City of Helsinki Django apps 🔔"
@@ -46,11 +46,11 @@ test = [
     "pytest-xdist[psutil]",
 ]
 rest_framework = ["djangorestframework"]
-all = ["django-pulu[rest_framework]", "django-pulu[test]"]
+all = ["django-helsinki-notification[rest_framework]", "django-helsinki-notification[test]"]
 
 [project.urls]
-Homepage = "https://github.com/City-of-Helsinki/django-pulu"
-Issues = "https://github.com/City-of-Helsinki/django-pulu/issues"
+Homepage = "https://github.com/City-of-Helsinki/django-helsinki-notification"
+Issues = "https://github.com/City-of-Helsinki/django-helsinki-notification/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -64,7 +64,7 @@ lint = [
 ]
 
 [tool.hatch.envs.hatch-test]
-default-args = ["pulu_tests"]
+default-args = ["tests"]
 randomize = true
 parallel = false
 features = ["all"]
@@ -89,7 +89,7 @@ matrix.django.dependencies = [
 
 [tool.hatch.envs.hatch-test.scripts]
 run = [
-    "./pulu_tests/manage.py makemigrations --check",
+    "./tests/manage.py makemigrations --check",
     "pytest{env:HATCH_TEST_ARGS:} {args}",
 ]
 run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
@@ -97,7 +97,7 @@ cov-combine = "coverage combine"
 cov-report = "coverage report"
 
 [tool.hatch.build.targets.wheel]
-packages = ["pulu"]
+packages = ["helsinki_notification"]
 
 [tool.ruff]
 target-version = "py39"
@@ -124,7 +124,7 @@ select = [
 [tool.pytest.ini_options]
 django_find_project = false
 testpaths = [
-    "pulu_tests",
+    "tests",
 ]
-DJANGO_SETTINGS_MODULE = "pulu_tests.settings"
+DJANGO_SETTINGS_MODULE = "tests.settings"
 pythonpath = "."

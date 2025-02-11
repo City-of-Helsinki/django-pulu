@@ -3,8 +3,8 @@ from datetime import datetime
 import pytest
 from freezegun import freeze_time
 
-from pulu.models import Notification
-from pulu_tests.utils import assert_qs_values
+from helsinki_notification.models import Notification
+from tests.utils import assert_qs_values
 
 
 @freeze_time("2025-01-01T12:00:00Z")

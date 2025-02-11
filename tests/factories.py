@@ -4,7 +4,7 @@ import factory
 from django.utils import timezone
 from pytest_factoryboy import register
 
-from pulu.models import Notification
+from helsinki_notification.models import Notification
 
 
 @register

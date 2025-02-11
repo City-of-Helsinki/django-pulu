@@ -5,7 +5,7 @@ import pytest
 from django.utils import timezone
 from pytest_factoryboy import register
 
-from pulu_tests.factories import NotificationFactory, ValidNotificationFactory
+from tests.factories import NotificationFactory, ValidNotificationFactory
 
 register(NotificationFactory)
 register(ValidNotificationFactory)

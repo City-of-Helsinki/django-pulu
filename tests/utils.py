@@ -2,7 +2,7 @@ from typing import Collection, Union
 
 from django.db.models import QuerySet
 
-from pulu.models import Notification
+from helsinki_notification.models import Notification
 
 
 def values_list(objects: Union[Collection, QuerySet[Notification]], *fields: str):

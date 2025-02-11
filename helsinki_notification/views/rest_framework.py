@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.generics import ListAPIView
 
-from pulu.models import Notification
+from helsinki_notification.models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
