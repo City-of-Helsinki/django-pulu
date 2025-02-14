@@ -4,7 +4,6 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-helsinki-notification"
-version = "0.1.0"
 authors = [{ name = "City of Helsinki", email = "dev@hel.fi" }]
 description = "Notifications for City of Helsinki Django apps 🔔"
 readme = "README.md"
@@ -34,6 +33,7 @@ classifiers = [
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = ["django>=4.2",]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
@@ -58,6 +58,9 @@ Issues = "https://github.com/City-of-Helsinki/django-helsinki-notification/issue
 
 [tool.hatch.build.targets.wheel]
 packages = ["helsinki_notification"]
+
+[tool.hatch.version]
+path = "helsinki_notification/__init__.py"
 
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
