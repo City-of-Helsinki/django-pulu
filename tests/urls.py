@@ -1,12 +1,9 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
-import helsinki_notification.views.rest_framework
+import helsinki_notification.contrib.rest_framework.urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(
-        "drf/notifications",
-        helsinki_notification.views.rest_framework.NotificationList.as_view(),
-    ),
+    path("drf/", include(helsinki_notification.contrib.rest_framework.urls)),
 ]

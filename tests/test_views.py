@@ -1,8 +1,8 @@
 import pytest
 from freezegun import freeze_time
 
+from helsinki_notification.contrib.rest_framework.views import NotificationSerializer
 from helsinki_notification.models import Notification
-from helsinki_notification.views.rest_framework import NotificationSerializer
 from tests.utils import values_list, values_list_from_dict
 
 
@@ -27,7 +27,7 @@ def test_rest_framework_list_endpoint(
         valid_notification_factory(type=Notification.Type.INFO),
     ]
 
-    response = client.get("/drf/notifications")
+    response = client.get("/drf/notifications/")
 
     assert response.status_code == 200
     assert len(response.data) == len(expected_order)
