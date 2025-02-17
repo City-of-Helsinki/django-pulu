@@ -32,5 +32,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class NotificationList(ListAPIView):
-    queryset = Notification.valid_objects.all()
     serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        return Notification.valid_objects.all()
