@@ -14,31 +14,33 @@ def test_notification_model_managers(notification_factory, make_relative_time):
         datetime.fromisoformat("2025-01-01T12:00:00+00:00")
     )
     expired_notification = notification_factory(
+        title_en="Past notification, should NOT show up",
         validity_period_start=relative_time.last_hour,
         validity_period_end=relative_time.last_second,
     )
     future_notification = notification_factory(
+        title_en="Future notification, should NOT show up",
         validity_period_start=relative_time.next_second,
         validity_period_end=relative_time.tomorrow,
     )
     valid_notifications = [
-        # Middle of validity period
         notification_factory(
+            title_en="Middle of validity period",
             validity_period_start=relative_time.last_hour,
             validity_period_end=relative_time.next_hour,
         ),
-        # First valid second
         notification_factory(
+            title_en="First valid second",
             validity_period_start=relative_time.now,
             validity_period_end=relative_time.next_hour,
         ),
-        # Last valid second
         notification_factory(
+            title_en="Last valid second",
             validity_period_start=relative_time.last_hour,
             validity_period_end=relative_time.now,
         ),
-        # Valid only at 12:00:00
         notification_factory(
+            title_en="Valid only at 12:00:00",
             validity_period_start=relative_time.now,
             validity_period_end=relative_time.now,
         ),
