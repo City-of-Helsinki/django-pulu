@@ -95,3 +95,7 @@ class Notification(models.Model):
 
     def __str__(self):
         return self._localized_title
+
+    @property
+    def type_name(self) -> str:
+        return Notification.Type(self.type).name
