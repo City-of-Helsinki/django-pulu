@@ -5,12 +5,14 @@ from helsinki_notification.models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
+    type_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Notification
         fields = [
             "id",
             "modified_at",
-            "type",
+            "type_name",
             "title_fi",
             "title_sv",
             "title_en",
@@ -24,6 +26,9 @@ class NotificationSerializer(serializers.ModelSerializer):
             "external_url_title_sv",
             "external_url_title_en",
         ]
+
+    def get_type_name(self, obj):
+        return obj.type_name
 
 
 class NotificationList(ListAPIView):
