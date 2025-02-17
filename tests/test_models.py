@@ -100,3 +100,17 @@ def test_notification_default_ordering(valid_notification_factory, make_relative
         assert_qs_values(
             Notification.valid_objects.all(), expected_order, "id", ordered=True
         )
+
+
+@pytest.mark.parametrize(
+    "type_value, expected",
+    [
+        (Notification.Type.INFO, "INFO"),
+        (Notification.Type.ALERT, "ALERT"),
+        (Notification.Type.ERROR, "ERROR"),
+    ],
+)
+@pytest.mark.django_db
+def test_notification_type_name(valid_notification_factory, type_value, expected):
+    notification = valid_notification_factory(type=type_value)
+    assert notification.type_name == expected
