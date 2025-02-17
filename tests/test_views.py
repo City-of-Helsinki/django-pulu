@@ -2,6 +2,7 @@ import pytest
 from freezegun import freeze_time
 
 from helsinki_notification.models import Notification
+from helsinki_notification.views.rest_framework import NotificationSerializer
 from tests.utils import values_list, values_list_from_dict
 
 
@@ -33,3 +34,9 @@ def test_rest_framework_list_endpoint(
     assert values_list_from_dict(response.data, "id") == values_list(
         expected_order, "id"
     )
+
+
+def test_rest_framework_type_name_field(valid_notification_factory):
+    notification = valid_notification_factory.build(type=Notification.Type.INFO)
+    serializer = NotificationSerializer(instance=notification)
+    assert serializer.data["type_name"] == "INFO"
