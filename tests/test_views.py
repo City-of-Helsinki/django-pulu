@@ -11,13 +11,13 @@ from tests.utils import values_list, values_list_from_dict
 def test_rest_framework_list_endpoint(
     notification_factory, valid_notification_factory, relative_now, client
 ):
-    # Past notification
     notification_factory(
+        title_en="Past notification",
         validity_period_start=relative_now.yesterday,
         validity_period_end=relative_now.last_second,
     )
-    # Future notification
     notification_factory(
+        title_en="Future notification",
         validity_period_start=relative_now.next_hour,
         validity_period_end=relative_now.far_future,
     )
