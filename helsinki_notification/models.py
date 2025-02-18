@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -95,6 +96,16 @@ class Notification(models.Model):
 
     def __str__(self):
         return self._localized_title
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.validity_period_start >= self.validity_period_end:
+            raise ValidationError(
+                "The validity period's start must occur before its end."
+            )
 
     @property
     def type_name(self) -> str:
