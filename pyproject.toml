@@ -62,12 +62,20 @@ packages = ["helsinki_notification"]
 [tool.hatch.version]
 path = "helsinki_notification/__init__.py"
 
+[tool.hatch.envs.default]
+dependencies = [
+    "pre-commit",
+]
+features = ["all"]
+python = "3.9"
+
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
 lint = [
     "pre-commit install",
     "pre-commit run -a",
 ]
+manage = "tests/manage.py {args}"
 
 [tool.hatch.envs.hatch-test]
 default-args = ["tests"]
