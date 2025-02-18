@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+from django.core.exceptions import ValidationError
 from freezegun import freeze_time
 
 from helsinki_notification.models import Notification
@@ -111,3 +112,21 @@ def test_notification_default_ordering(valid_notification_factory, make_relative
 def test_notification_type_name(valid_notification_factory, type_value, expected):
     notification = valid_notification_factory(type=type_value)
     assert notification.type_name == expected
+
+
+@pytest.mark.django_db
+def test_notification_cannot_start_after_its_end(notification_factory, relative_now):
+    with pytest.raises(ValidationError):
+        notification_factory(
+            validity_period_start=relative_now.far_future,
+            validity_period_end=relative_now.last_day,
+        )
+
+
+@pytest.mark.django_db
+def test_notification_cannot_have_zero_duration(notification_factory, relative_now):
+    with pytest.raises(ValidationError):
+        notification_factory(
+            validity_period_start=relative_now.now,
+            validity_period_end=relative_now.now,
+        )
