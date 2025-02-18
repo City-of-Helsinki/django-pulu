@@ -8,7 +8,7 @@ from tests.utils import values_list, values_list_from_dict
 
 @freeze_time("2025-01-01T12:00:00Z")
 @pytest.mark.django_db
-def test_rest_framework_list_endpoint(
+def test_list_endpoint(
     notification_factory, valid_notification_factory, relative_now, client
 ):
     notification_factory(
@@ -36,7 +36,7 @@ def test_rest_framework_list_endpoint(
     )
 
 
-def test_rest_framework_type_name_field(valid_notification_factory):
+def test_type_name_field(valid_notification_factory):
     notification = valid_notification_factory.build(type=Notification.Type.INFO)
     serializer = NotificationSerializer(instance=notification)
     assert serializer.data["type_name"] == "INFO"
