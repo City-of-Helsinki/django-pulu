@@ -11,7 +11,7 @@ class ValidNotificationManager(models.Manager):
         return (
             super()
             .get_queryset()
-            .filter(validity_period_start__lte=now, validity_period_end__gte=now)
+            .filter(validity_period_start__lte=now, validity_period_end__gt=now)
         )
 
 
