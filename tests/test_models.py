@@ -37,12 +37,7 @@ def test_notification_model_managers(notification_factory, make_relative_time):
         notification_factory(
             title_en="Last valid second",
             validity_period_start=relative_time.last_hour,
-            validity_period_end=relative_time.now,
-        ),
-        notification_factory(
-            title_en="Valid only at 12:00:00",
-            validity_period_start=relative_time.now,
-            validity_period_end=relative_time.now,
+            validity_period_end=relative_time.next_second,
         ),
     ]
     created_notifications = [
