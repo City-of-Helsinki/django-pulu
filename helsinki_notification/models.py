@@ -59,19 +59,16 @@ class Notification(models.Model):
 
     # External URL title
     external_url_title_fi = models.CharField(
-        null=True,
         blank=True,
         max_length=100,
         verbose_name=_("External URL title (Finnish)"),
     )
     external_url_title_sv = models.CharField(
-        null=True,
         blank=True,
         max_length=100,
         verbose_name=_("External URL title (Swedish)"),
     )
     external_url_title_en = models.CharField(
-        null=True,
         blank=True,
         max_length=100,
         verbose_name=_("External URL title (English)"),
